@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 
 // Import
+const mongoose = require("mongoose");
 const { connectDB } = require("./config/connectDB");
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
@@ -56,6 +57,15 @@ app.use("/api/v1", uploadRoutes);
 app.use("/api/v1/species", speciesRoutes);
 app.use("/api/v1/history", historyRoutes);
 app.use("/api/v1/gallery", galleryRoutes);
+
+app.get("/api/v1/health", (req, res) => {
+  res.json({
+    status: "ok",
+    server: "express",
+    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Server React
 
