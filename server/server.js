@@ -59,7 +59,11 @@ app.use("/api/v1/gallery", galleryRoutes);
 
 // Server React
 
-app.listen(PORT, async () => {
+async function startServer() {
   await connectDB();
-  console.log("Server is running on port:", PORT);
-});
+  app.listen(PORT, () => {
+    console.log("Server is running on port:", PORT);
+  });
+}
+
+startServer();
