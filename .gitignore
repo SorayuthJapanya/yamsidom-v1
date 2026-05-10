@@ -39,5 +39,17 @@ coverage/
 # Uploaded files
 server/uploads/*
 
+# ML model files — never commit (hundreds of MB each, deploy via SCP/rsync)
+*.keras
+*.pt
+*.h5
+*.pb
+*.tflite
+ml_api/model/
+ml_api/src/model/
+ml_api/src/oldModel/
+ml_api/venv/
+
+# Environment files
 .env.dev
 .env.prod
