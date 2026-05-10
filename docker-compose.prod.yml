@@ -1,0 +1,54 @@
+
+services:
+  # Model
+  ml_api:
+    build:
+      context: ./ml_api
+      dockerfile: Dockerfile.prod
+    container_name: flask-server
+    volumes:
+      - ./ml_api/model:/app/model
+    env_file:
+      - .env.prod
+    networks:
+      - localyam-app-network
+    restart: unless-stopped
+
+  # Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    container_name: express-server
+    volumes:
+      - ./server/uploads:/app/uploads
+    env_file:
+      - .env.prod
+    depends_on:
+      - ml_api
+    networks:
+      - localyam-app-network
+    restart: unless-stopped
+
+  # Client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    container_name: react-client
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env.prod
+    depends_on:
+      - server
+    networks:
+      - localyam-app-network
+    restart: unless-stopped
+
+
+# Networks
+networks:
+  localyam-app-network:
+    driver: bridge
